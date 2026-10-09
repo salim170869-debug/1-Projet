@@ -11,6 +11,12 @@ Une première application web en français pour un gestionnaire de locations sai
 - **Revenus** : enregistrer les paiements reçus et consulter le montant réservé, les encaissements et les soldes. Filtrer par mois ; les réservations sont rattachées au mois d’arrivée, les encaissements au mois du paiement.
 - **Vue d’ensemble** : consulter les séjours à venir, les séjours en cours, les logements occupés, les ménages et les encaissements.
 
+## Démonstration avec des exemples
+
+La démonstration comporte trois logements, six voyageurs, six séjours (passé, en cours, à venir, à confirmer et annulé), les ménages associés et trois paiements. Tout est fictif et signalé dans l’interface.
+
+La commande `npm run demo` prépare puis démarre cette version. Elle utilise une base séparée (`data/demo.sqlite`) et conserve les modifications lors des redémarrages. Elle ne modifie pas la base normale `data/rentals.sqlite`. Un aperçu interactif dans un navigateur extérieur exige toujours un accès au serveur : ce dépôt ne fournit pas de lien hébergé.
+
 ## Votre premier parcours
 
 1. Cliquez sur **Ajouter mon premier logement** et remplissez sa fiche.

@@ -38,6 +38,7 @@ function Badge({status}:{status:string}) { return <span className={`badge ${stat
 
 export default function RentalApp() {
   const [data,setData] = useState<Data>(empty), [section,setSection] = useState<Section>('dashboard');
+  const [demo,setDemo] = useState(false);
   const [loading,setLoading] = useState(true), [error,setError] = useState(''), [notice,setNotice] = useState('');
   const [editor,setEditor] = useState<Editor|null>(null), [busy,setBusy] = useState(false), [formError,setFormError] = useState('');
   const [search,setSearch] = useState(''), [status,setStatus] = useState('all');
@@ -45,7 +46,7 @@ export default function RentalApp() {
   const [month,setMonth] = useState('');
   async function load() {
     setLoading(true); setError('');
-    try { const response = await fetch('/api/data',{cache:'no-store'}); const body = await response.json(); if (!response.ok) throw new Error(body.error); setData(body); }
+    try { const response = await fetch('/api/data',{cache:'no-store'}); const body = await response.json(); if (!response.ok) throw new Error(body.error); setData(body);setDemo(response.headers.get('X-Sejour-Demo')==='1'); }
     catch (e) { setError(e instanceof Error ? e.message : 'Connexion impossible.'); }
     finally { setLoading(false); }
   }
@@ -121,6 +122,7 @@ export default function RentalApp() {
   return <div className="app-shell">
     <aside className="sidebar"><a className="brand" href="/" aria-label="Séjour, accueil"><span className="brand-mark"><Icon name="home" size={25}/></span>Séjour<span className="brand-dot">.</span></a><div className="workspace"><div className="workspace-avatar">ML</div><div><strong>Mes locations</strong><small>Espace de gestion</small></div></div><p className="nav-label">VOTRE QUOTIDIEN</p><nav aria-label="Navigation principale">{sections.map(s=><button key={s.id} className={`nav-item ${section===s.id?'active':''}`} onClick={()=>go(s.id)} aria-current={section===s.id?'page':undefined}><Icon name={s.icon}/>{s.label}{s.id==='cleanings' && todo.length>0 && <span className="nav-count">{todo.length}</span>}</button>)}</nav><div className="sidebar-note"><span className="status-dot"/><strong>Tout commence ici</strong><p>Vos logements, vos séjours.<br/>Un seul endroit pour les gérer.</p></div><div className="sidebar-bottom"><span className="user-avatar">M</span><div><strong>Mon espace</strong><small>Version locale · v1</small></div></div></aside>
     <main className="main"><header className="topbar"><span>Mes locations <span className="crumb">/</span> <strong>{meta.label}</strong></span><span className="today">{loading?'Votre espace de gestion':new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}</span></header><div className="content"><div className="page-heading"><div><div className="eyebrow">GESTION DE LOCATIONS SAISONNIÈRES</div><h1>{section==='dashboard'?'Bienvenue chez vous.':meta.label}</h1><p>{meta.description}</p></div><button className="primary" onClick={add} disabled={loading || !!error}><Icon name="plus" size={18}/>{addLabel[section]}</button></div>
+    {demo && <div className="demo-banner" role="status"><strong>Mode démonstration</strong><span>Les logements, voyageurs, séjours et paiements sont fictifs. Vous pouvez essayer les formulaires.</span></div>}
     {notice && <div className="notice" role="status"><Icon name="check" size={18}/>{notice}<button aria-label="Fermer la notification" onClick={()=>setNotice('')}><Icon name="close" size={16}/></button></div>}
     {error && <div className="error-banner" role="alert">{error}<button onClick={()=>void load()}>Réessayer</button></div>}
     {loading ? <div className="loading" role="status">Chargement de votre espace…</div> : !error && <>

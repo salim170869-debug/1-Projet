@@ -8,7 +8,8 @@
     "start": "next start --hostname 0.0.0.0",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "demo": "node --experimental-strip-types scripts/demo.ts && RENTAL_DB_PATH=data/demo.sqlite RENTAL_DEMO=1 next dev --hostname 127.0.0.1"
   },
   "dependencies": {
     "next": "^15.5.0",
